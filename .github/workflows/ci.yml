@@ -107,12 +107,8 @@ jobs:
             tar -xzvf deploy.tar.gz
             rm -f deploy.tar.gz
 
-            # Install dependencies via CloudLinux virtual environment
-            # (node_modules dikelola CloudLinux sebagai symlink, tidak boleh ada di app root)
-            source /home/uucdjd7c/nodevenv/rzkydev666.my.id/22/bin/activate
-            npm install --production
-
             # Restart Node.js app di cPanel (touch server.js = trigger auto-restart)
+            # npm install dilakukan manual via cPanel panel atau terminal hosting
             touch server.js
 
             echo "✅ Deploy selesai!"
