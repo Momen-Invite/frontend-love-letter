@@ -1,0 +1,139 @@
+{
+  "categories": [
+    {
+      "id": "romance",
+      "label": "Romance"
+    },
+    {
+      "id": "adventure",
+      "label": "Adventure"
+    },
+    {
+      "id": "celebration",
+      "label": "Celebration"
+    }
+  ],
+  "items": [
+    {
+      "id": "01",
+      "type": "image",
+      "src": "/images/gallery/romance/momen-indah1.jpeg",
+      "title": "Momen Indah1",
+      "description": "Photo dari koleksi romance",
+      "category": "romance"
+    },
+    {
+      "id": "02",
+      "type": "image",
+      "src": "/images/gallery/romance/momen-indah2.jpeg",
+      "title": "Momen Indah2",
+      "description": "Photo dari koleksi romance",
+      "category": "romance"
+    },
+    {
+      "id": "03",
+      "type": "image",
+      "src": "/images/gallery/romance/momen-indah3.jpeg",
+      "title": "Momen Indah3",
+      "description": "Photo dari koleksi romance",
+      "category": "romance"
+    },
+    {
+      "id": "04",
+      "type": "image",
+      "src": "/images/gallery/romance/momen-indah4.jpeg",
+      "title": "Momen Indah4",
+      "description": "Photo dari koleksi romance",
+      "category": "romance"
+    },
+    {
+      "id": "05",
+      "type": "image",
+      "src": "/images/gallery/romance/momen-indah5.jpeg",
+      "title": "Momen Indah5",
+      "description": "Photo dari koleksi romance",
+      "category": "romance"
+    },
+    {
+      "id": "01",
+      "type": "image",
+      "src": "/images/gallery/adventure/momen-indah10.jpeg",
+      "title": "Momen Indah10",
+      "description": "Photo dari koleksi adventure",
+      "category": "adventure"
+    },
+    {
+      "id": "02",
+      "type": "image",
+      "src": "/images/gallery/adventure/momen-indah6.jpeg",
+      "title": "Momen Indah6",
+      "description": "Photo dari koleksi adventure",
+      "category": "adventure"
+    },
+    {
+      "id": "03",
+      "type": "image",
+      "src": "/images/gallery/adventure/momen-indah7.jpeg",
+      "title": "Momen Indah7",
+      "description": "Photo dari koleksi adventure",
+      "category": "adventure"
+    },
+    {
+      "id": "04",
+      "type": "image",
+      "src": "/images/gallery/adventure/momen-indah8.jpeg",
+      "title": "Momen Indah8",
+      "description": "Photo dari koleksi adventure",
+      "category": "adventure"
+    },
+    {
+      "id": "05",
+      "type": "image",
+      "src": "/images/gallery/adventure/momen-indah9.jpeg",
+      "title": "Momen Indah9",
+      "description": "Photo dari koleksi adventure",
+      "category": "adventure"
+    },
+    {
+      "id": "01",
+      "type": "video",
+      "src": "/images/gallery/celebration/momen-indah-video.mp4",
+      "title": "Momen Indah Video",
+      "description": "Video dari koleksi celebration",
+      "category": "celebration"
+    },
+    {
+      "id": "02",
+      "type": "image",
+      "src": "/images/gallery/celebration/momen-indah11.jpeg",
+      "title": "Momen Indah11",
+      "description": "Photo dari koleksi celebration",
+      "category": "celebration"
+    },
+    {
+      "id": "03",
+      "type": "image",
+      "src": "/images/gallery/celebration/momen-indah12.jpeg",
+      "title": "Momen Indah12",
+      "description": "Photo dari koleksi celebration",
+      "category": "celebration"
+    },
+    {
+      "id": "04",
+      "type": "image",
+      "src": "/images/gallery/celebration/momen-indah13.jpeg",
+      "title": "Momen Indah13",
+      "description": "Photo dari koleksi celebration",
+      "category": "celebration"
+    },
+    {
+      "id": "05",
+      "type": "image",
+      "src": "/images/gallery/celebration/momen-indah14.jpeg",
+      "title": "Momen Indah14",
+      "description": "Photo dari koleksi celebration",
+      "category": "celebration"
+    }
+  ],
+  "generatedAt": "2026-07-16T09:13:00.717Z"
+}
