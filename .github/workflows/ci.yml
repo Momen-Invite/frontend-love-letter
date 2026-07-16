@@ -1,4 +1,4 @@
-name: CI
+name: CI & Deploy to Production
 
 on:
   push:
@@ -9,28 +9,104 @@ on:
       - master
 
 jobs:
+  # ─── Job 1: Quality Check (lint + typecheck + build) ───────────────────────
   quality:
+    name: ✅ Quality Check
     runs-on: ubuntu-latest
     timeout-minutes: 15
 
     steps:
-      - name: Checkout
+      - name: 🚚 Checkout code
         uses: actions/checkout@v4
 
-      - name: Setup Node.js
+      - name: ⚙️ Setup Node.js
         uses: actions/setup-node@v4
         with:
           node-version: 24
           cache: npm
 
-      - name: Install dependencies
+      - name: 📦 Install dependencies
         run: npm ci
 
-      - name: Lint
+      - name: 🔍 Lint
         run: npm run lint
 
-      - name: Type check
+      - name: 🔎 Type check
         run: npm run typecheck
 
-      - name: Build
+      - name: 🏗️ Build
         run: npm run build
+        env:
+          NODE_ENV: production
+          NEXT_TELEMETRY_DISABLED: 1
+
+  # ─── Job 2: Deploy ke cPanel (hanya push master, setelah quality lulus) ────
+  deploy:
+    name: 🚀 Deploy to cPanel
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    needs: quality                  # tunggu quality lulus dulu
+    if: github.event_name == 'push' # skip deploy saat pull_request
+
+    steps:
+      - name: 🚚 Checkout code
+        uses: actions/checkout@v4
+
+      - name: ⚙️ Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: npm
+
+      - name: 📦 Install dependencies
+        run: npm ci
+
+      # Build ulang khusus deploy (standalone output → .next/standalone/server.js)
+      - name: 🏗️ Build Next.js (standalone)
+        run: npm run build
+        env:
+          NODE_ENV: production
+          NEXT_TELEMETRY_DISABLED: 1
+
+      # Salin public/ dan .next/static ke dalam standalone bundle
+      # (standalone tidak menyertakan ini secara otomatis)
+      - name: 📂 Prepare standalone bundle
+        run: |
+          cp -r public .next/standalone/public
+          cp -r .next/static .next/standalone/.next/static
+
+      - name: 📦 Compress standalone bundle
+        run: |
+          tar -czvf deploy.tar.gz \
+            --exclude='*.tsbuildinfo' \
+            -C .next/standalone \
+            .
+
+      - name: 🚀 Upload via SCP
+        uses: appleboy/scp-action@v0.1.4
+        with:
+          host: ${{ secrets.SSH_HOST }}
+          username: ${{ secrets.SSH_USERNAME }}
+          port: ${{ secrets.SSH_PORT }}
+          key: ${{ secrets.SSH_PRIVATE_KEY }}
+          source: "deploy.tar.gz"
+          target: /home/uucdjd7c/rzkydev666.my.id
+
+      - name: 🛠️ Extract & Restart on Server
+        uses: appleboy/ssh-action@v1.0.0
+        with:
+          host: ${{ secrets.SSH_HOST }}
+          username: ${{ secrets.SSH_USERNAME }}
+          port: ${{ secrets.SSH_PORT }}
+          key: ${{ secrets.SSH_PRIVATE_KEY }}
+          script: |
+            set -e
+            cd /home/uucdjd7c/rzkydev666.my.id
+
+            tar -xzvf deploy.tar.gz
+            rm -f deploy.tar.gz
+
+            # Restart Node.js app di cPanel (touch server.js = trigger auto-restart)
+            touch server.js
+
+            echo "✅ Deploy selesai!"
