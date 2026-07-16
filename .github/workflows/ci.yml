@@ -79,6 +79,7 @@ jobs:
         run: |
           tar -czvf deploy.tar.gz \
             --exclude='*.tsbuildinfo' \
+            --exclude='node_modules' \
             -C .next/standalone \
             .
 
@@ -105,6 +106,11 @@ jobs:
 
             tar -xzvf deploy.tar.gz
             rm -f deploy.tar.gz
+
+            # Install dependencies via CloudLinux virtual environment
+            # (node_modules dikelola CloudLinux sebagai symlink, tidak boleh ada di app root)
+            source /home/uucdjd7c/nodevenv/rzkydev666.my.id/22/bin/activate
+            npm install --production
 
             # Restart Node.js app di cPanel (touch server.js = trigger auto-restart)
             touch server.js
