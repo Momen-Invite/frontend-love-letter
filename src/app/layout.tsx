@@ -1,5 +1,7 @@
 import type { Metadata } from "next";
 import { Playfair_Display, Quicksand } from "next/font/google";
+import { Analytics } from "@vercel/analytics/next";
+import { SpeedInsights } from "@vercel/speed-insights/next";
 import "./globals.css";
 
 const playfair = Playfair_Display({
@@ -32,6 +34,8 @@ export default function RootLayout({
     >
       <body className="min-h-full bg-[#faf6f1] text-[#2d1f14] selection:bg-pink-200">
         {children}
+        <Analytics />
+        <SpeedInsights />
       </body>
     </html>
   );
