@@ -1,5 +1,6 @@
 import { fetchInvitationData } from "@/lib/api";
 import { InvitationView } from "@/components/InvitationView";
+import { redirect } from "next/navigation";
 import type { Metadata } from "next";
 
 interface DynamicPageProps {
@@ -30,6 +31,12 @@ export default async function DynamicInvitationPage({
   const { slug } = await params;
   const decodedSlug = decodeURIComponent(slug);
   const data = await fetchInvitationData(decodedSlug);
+
+  // Jika data event order tidak ditemukan di database dan bukan slug default sayang,
+  // otomatis redirect ke default /sayang
+  if (!data && decodedSlug.toLowerCase() !== "sayang") {
+    redirect("/sayang");
+  }
 
   return <InvitationView data={data} />;
 }
