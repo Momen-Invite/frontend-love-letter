@@ -6,11 +6,23 @@ This version has breaking changes — APIs, conventions, and file structure may 
 
 <!-- END:nextjs-agent-rules -->
 
-# Website Reverse-Engineer Templates
+# Momen Invite — Theme: Love Letter (`love-letter`)
 
-## What This Is
+## Arsitektur & Pola Subpath
+- **Nama Template:** Love Letter
+- **Slug / Subpath Identifier:** `love-letter`
+- **Kategori Undangan:** Birthday & Romantic Celebration
+- **Pola URL Publik:** `https://momeninvite.web.id/love-letter/:slug`
+  - Contoh: `https://momeninvite.web.id/love-letter/sayang`
+- **Konfigurasi BasePath:** `basePath: "/love-letter"` di `next.config.ts` (wajib untuk isolasi routing dan asset bundler Next.js).
+- **Integrasi API:** `https://api.momeninvite.web.id/api/public/invitations/:slug`
+- **Storage & CDN:** Cloudflare R2 via `https://cdn.momeninvite.web.id/events/:slug/...`
 
-A reusable template for reverse-engineering any website into a clean, modern Next.js codebase using AI coding agents. The Next.js + shadcn/ui + Tailwind v4 base is pre-scaffolded — just run `/clone-website <url1> [<url2> ...]`.
+## Git & Deployment Workflow
+- **Branch `master`**: Staging & local development
+- **Branch `production`**: Vercel production deployment
+- **Vercel Build Command**: `npm run build`
+- **Quality Gate**: `npm run check` (Lint + Typecheck + Build) wajib lulus 0 error sebelum push.
 
 ## Tech Stack
 
