@@ -119,7 +119,7 @@ export const galleryItems: GalleryItem[] = [
   {
     id: "04",
     title: "Pout Gemas di Mobil",
-    category: "Jalan-jalan",
+    category: "Jalan-Jalan",
     type: "image",
     src: "/images/momen-indah3.jpeg",
     description:
@@ -137,7 +137,7 @@ export const galleryItems: GalleryItem[] = [
   {
     id: "06",
     title: "Golden Hour di Mobil",
-    category: "Jalan-jalan",
+    category: "Jalan-Jalan",
     type: "image",
     src: "/images/momen-indah5.jpeg",
     description:
@@ -164,7 +164,7 @@ export const galleryItems: GalleryItem[] = [
   {
     id: "09",
     title: "Selfie Jalan Sore",
-    category: "Jalan-jalan",
+    category: "Jalan-Jalan",
     type: "image",
     src: "/images/momen-indah8.jpeg",
     description:
@@ -191,7 +191,7 @@ export const galleryItems: GalleryItem[] = [
   {
     id: "12",
     title: "Senja di Atas Kapal",
-    category: "Jalan-jalan",
+    category: "Jalan-Jalan",
     type: "image",
     src: "/images/momen-indah11.jpeg",
     description:

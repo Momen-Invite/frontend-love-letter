@@ -16,7 +16,7 @@ export interface GalleryItem {
   id: string;
   title: string;
   description: string;
-  category: "Semua" | "Spesial" | "Cinta" | "Momen" | "Jalan-jalan";
+  category: "Semua" | "Spesial" | "Cinta" | "Momen" | "Jalan-jalan" | "Jalan-Jalan" | string;
   type: "image" | "video";
   src: string;
 }

@@ -14,6 +14,18 @@ import type { GalleryItem } from "@/types/gallery";
 
 const CDN_BASE = "https://cdn.momeninvite.web.id";
 
+function formatCategory(cat?: string | null): string {
+  if (!cat) return "Momen";
+  return cat
+    .split(/([ -])/)
+    .map((part) =>
+      part.length > 0
+        ? part.charAt(0).toUpperCase() + part.slice(1).toLowerCase()
+        : part
+    )
+    .join("");
+}
+
 interface InvitationViewProps {
   data: InvitationData | null;
 }
@@ -64,7 +76,7 @@ export function InvitationView({ data }: InvitationViewProps) {
                 `${CDN_BASE}/events/${slug}/${defaultFolder}/${defaultFilename}`,
               title: g.caption || `Momen ${idx + 1}`,
               description: g.caption || "",
-              category: g.category || "Momen",
+              category: formatCategory(g.category),
             };
           })
       : undefined;

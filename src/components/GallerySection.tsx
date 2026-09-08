@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useCallback } from "react";
+import { useState } from "react";
 import Image from "next/image";
 import { useScrollAnimation } from "@/hooks/useScrollAnimation";
 import { Camera, X, ChevronLeft, ChevronRight, Play } from "lucide-react";
@@ -84,43 +84,67 @@ export interface GallerySectionProps {
   items?: GalleryItem[];
 }
 
+export function formatCategoryLabel(cat?: string | null): string {
+  if (!cat) return "";
+  return cat
+    .split(/([ -])/)
+    .map((part) =>
+      part.length > 0
+        ? part.charAt(0).toUpperCase() + part.slice(1).toLowerCase()
+        : part
+    )
+    .join("");
+}
+
 export function GallerySection({ items = [] }: GallerySectionProps = {}) {
   const [ref, isVisible] = useScrollAnimation<HTMLElement>(0.1);
   const [activeCategory, setActiveCategory] = useState<string>("Semua");
   const [lightboxIndex, setLightboxIndex] = useState<number | null>(null);
 
-  // Dapatkan daftar kategori dinamis dari item
-  const categories = ["Semua", ...Array.from(new Set(items.map((i) => i.category).filter(Boolean)))];
+  // Dapatkan daftar kategori dinamis dari item (format kapital & deduplikasi case-insensitive)
+  const categoryMap = new Map<string, string>();
+  items.forEach((i) => {
+    if (i.category) {
+      const formatted = formatCategoryLabel(i.category);
+      const lower = formatted.toLowerCase();
+      if (!categoryMap.has(lower)) {
+        categoryMap.set(lower, formatted);
+      }
+    }
+  });
+
+  const categories = ["Semua", ...Array.from(categoryMap.values())];
 
   const filteredItems =
-    activeCategory === "Semua"
+    activeCategory.toLowerCase() === "semua"
       ? items
       : items.filter(
           (item) =>
-            item.category.toLowerCase() === activeCategory.toLowerCase()
+            formatCategoryLabel(item.category).toLowerCase() ===
+            activeCategory.toLowerCase()
         );
 
-  const openLightbox = useCallback((index: number) => {
+  const openLightbox = (index: number) => {
     setLightboxIndex(index);
-  }, []);
+  };
 
-  const closeLightbox = useCallback(() => {
+  const closeLightbox = () => {
     setLightboxIndex(null);
-  }, []);
+  };
 
-  const goNext = useCallback(() => {
+  const goNext = () => {
     setLightboxIndex((prev) =>
       prev !== null ? (prev + 1) % filteredItems.length : null
     );
-  }, [filteredItems.length]);
+  };
 
-  const goPrev = useCallback(() => {
+  const goPrev = () => {
     setLightboxIndex((prev) =>
       prev !== null
         ? (prev - 1 + filteredItems.length) % filteredItems.length
         : null
     );
-  }, [filteredItems.length]);
+  };
 
   if (items.length === 0) return null;
 
@@ -164,7 +188,7 @@ export function GallerySection({ items = [] }: GallerySectionProps = {}) {
               key={category}
               onClick={() => setActiveCategory(category)}
               className={`px-5 py-2 rounded-full text-sm font-medium transition-all duration-300 cursor-pointer ${
-                activeCategory === category
+                activeCategory.toLowerCase() === category.toLowerCase()
                   ? "bg-gradient-to-r from-pink-primary to-pink-dark text-white shadow-md shadow-pink-primary/20"
                   : "bg-white text-brown-light border border-gold/20 hover:border-pink-primary/30 hover:text-pink-primary"
               }`}
