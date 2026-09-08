@@ -68,6 +68,16 @@ export function Header({ title = "Happy Birthday" }: HeaderProps = {}) {
                 {link.label}
               </button>
             ))}
+            <a
+              href="https://momeninvite.web.id"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="text-xs px-3 py-1 rounded-full border border-pink-primary/30 text-pink-primary hover:bg-pink-primary hover:text-white transition-all font-medium flex items-center gap-1 shadow-sm"
+              title="Kunjungi Platform Momen Invite"
+            >
+              <span>Momen Invite</span>
+              <span className="text-[10px]">↗</span>
+            </a>
           </div>
 
           {/* Mobile menu button */}
@@ -97,7 +107,7 @@ export function Header({ title = "Happy Birthday" }: HeaderProps = {}) {
         {/* Mobile menu */}
         <div
           className={`md:hidden overflow-hidden transition-all duration-300 ${
-            isMobileMenuOpen ? "max-h-64 pb-4" : "max-h-0"
+            isMobileMenuOpen ? "max-h-80 pb-4" : "max-h-0"
           }`}
         >
           <div className="flex flex-col gap-2 pt-2">
@@ -110,6 +120,18 @@ export function Header({ title = "Happy Birthday" }: HeaderProps = {}) {
                 {link.label}
               </button>
             ))}
+            <div className="pt-2 mt-1 border-t border-gold/15 flex justify-start">
+              <a
+                href="https://momeninvite.web.id"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-xs text-brown-light hover:text-pink-primary transition-colors flex items-center gap-1.5 py-1 font-medium"
+              >
+                <span>Dibuat dengan</span>
+                <span className="font-semibold text-pink-primary underline underline-offset-2">Momen Invite</span>
+                <span>↗</span>
+              </a>
+            </div>
           </div>
         </div>
       </div>

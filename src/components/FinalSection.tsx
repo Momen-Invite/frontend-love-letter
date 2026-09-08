@@ -112,10 +112,25 @@ export function FinalSection({
             />
           </div>
 
-          {/* Footer credit */}
-          <p className="mt-16 text-white/50 text-sm">
-            {footerCredit}
-          </p>
+          {/* Footer credit & Momen Invite Official Copyright */}
+          <div className="mt-16 pt-8 border-t border-white/10 flex flex-col items-center gap-3">
+            <p className="text-white/80 text-sm font-medium tracking-wide">
+              {footerCredit}
+            </p>
+            <div className="text-white/40 text-xs flex items-center gap-2 flex-wrap justify-center font-light">
+              <span>© {new Date().getFullYear()}</span>
+              <a
+                href="https://momeninvite.web.id"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-pink-light/80 hover:text-white underline underline-offset-4 transition-colors font-medium"
+              >
+                Momen Invite
+              </a>
+              <span>•</span>
+              <span>Platform Undangan & Kejutan Digital</span>
+            </div>
+          </div>
         </div>
       </div>
     </section>

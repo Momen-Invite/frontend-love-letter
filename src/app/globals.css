@@ -243,3 +243,23 @@ html {
 html {
   overflow-x: hidden;
 }
+
+/* Floating heart particle burst animation */
+@keyframes float-love {
+  0% {
+    opacity: 1;
+    transform: translate(0, 0) scale(0.5) rotate(0deg);
+  }
+  25% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0;
+    transform: translate(var(--dx, 0px), var(--dy, -150px)) scale(1.4) rotate(var(--rot, 0deg));
+  }
+}
+
+.animate-float-love {
+  animation: float-love 1.8s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+}
+

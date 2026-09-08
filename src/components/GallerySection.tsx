@@ -3,7 +3,8 @@
 import { useState } from "react";
 import Image from "next/image";
 import { useScrollAnimation } from "@/hooks/useScrollAnimation";
-import { Camera, X, ChevronLeft, ChevronRight, Play } from "lucide-react";
+import { Camera, X, ChevronLeft, ChevronRight, Play, Volume2, VolumeX } from "lucide-react";
+import { pauseBackgroundMusic, resumeBackgroundMusic } from "@/hooks/useAudio";
 import type { GalleryItem } from "@/types/gallery";
 
 function GalleryCard({
@@ -44,9 +45,13 @@ function GalleryCard({
               }}
             />
             <div className="absolute inset-0 flex items-center justify-center bg-black/20 group-hover:bg-black/10 transition-colors">
-              <div className="w-12 h-12 rounded-full bg-white/80 flex items-center justify-center">
+              <div className="w-12 h-12 rounded-full bg-white/80 flex items-center justify-center shadow">
                 <Play className="w-5 h-5 text-charcoal ml-0.5" />
               </div>
+            </div>
+            <div className="absolute top-2 right-2 px-2.5 py-1 rounded-full bg-black/60 backdrop-blur-sm flex items-center gap-1 text-[11px] font-medium text-white shadow z-10">
+              <Play className="w-3 h-3 fill-white" />
+              <span>Putar Video</span>
             </div>
           </div>
         ) : (
@@ -100,6 +105,7 @@ export function GallerySection({ items = [] }: GallerySectionProps = {}) {
   const [ref, isVisible] = useScrollAnimation<HTMLElement>(0.1);
   const [activeCategory, setActiveCategory] = useState<string>("Semua");
   const [lightboxIndex, setLightboxIndex] = useState<number | null>(null);
+  const [isVideoMuted, setIsVideoMuted] = useState(false);
 
   // Dapatkan daftar kategori dinamis dari item (format kapital & deduplikasi case-insensitive)
   const categoryMap = new Map<string, string>();
@@ -126,24 +132,40 @@ export function GallerySection({ items = [] }: GallerySectionProps = {}) {
 
   const openLightbox = (index: number) => {
     setLightboxIndex(index);
+    if (filteredItems[index]?.type === "video") {
+      pauseBackgroundMusic();
+    }
   };
 
   const closeLightbox = () => {
     setLightboxIndex(null);
+    resumeBackgroundMusic();
   };
 
   const goNext = () => {
-    setLightboxIndex((prev) =>
-      prev !== null ? (prev + 1) % filteredItems.length : null
-    );
+    setLightboxIndex((prev) => {
+      if (prev === null) return null;
+      const nextIdx = (prev + 1) % filteredItems.length;
+      if (filteredItems[nextIdx]?.type === "video") {
+        pauseBackgroundMusic();
+      } else {
+        resumeBackgroundMusic();
+      }
+      return nextIdx;
+    });
   };
 
   const goPrev = () => {
-    setLightboxIndex((prev) =>
-      prev !== null
-        ? (prev - 1 + filteredItems.length) % filteredItems.length
-        : null
-    );
+    setLightboxIndex((prev) => {
+      if (prev === null) return null;
+      const prevIdx = (prev - 1 + filteredItems.length) % filteredItems.length;
+      if (filteredItems[prevIdx]?.type === "video") {
+        pauseBackgroundMusic();
+      } else {
+        resumeBackgroundMusic();
+      }
+      return prevIdx;
+    });
   };
 
   if (items.length === 0) return null;
@@ -249,32 +271,73 @@ export function GallerySection({ items = [] }: GallerySectionProps = {}) {
             onClick={(e) => e.stopPropagation()}
           >
             {filteredItems[lightboxIndex].type === "video" ? (
-              <video
-                src={filteredItems[lightboxIndex].src}
-                className="w-full h-auto max-h-[85vh] object-contain rounded-lg"
-                controls
-                autoPlay
-                muted
-              />
-            ) : filteredItems[lightboxIndex].src ? (
-              <Image
-                src={filteredItems[lightboxIndex].src}
-                alt={filteredItems[lightboxIndex].title}
-                width={1200}
-                height={800}
-                className="w-full h-auto max-h-[85vh] object-contain rounded-lg"
-              />
-            ) : null}
+              <div className="relative w-full rounded-xl overflow-hidden bg-black/90 shadow-2xl">
+                {/* Header video: judul, deskripsi & tombol un-mute (di atas agar tidak menutupi kontrol bawah) */}
+                <div className="absolute top-0 inset-x-0 z-20 bg-gradient-to-b from-black/90 via-black/50 to-transparent p-4 sm:p-5 flex items-start justify-between gap-3 pointer-events-none">
+                  <div className="text-left pr-4">
+                    <h3 className="text-white font-semibold text-base sm:text-lg drop-shadow">
+                      {filteredItems[lightboxIndex].title}
+                    </h3>
+                    <p className="text-white/80 text-xs sm:text-sm mt-0.5 line-clamp-2 drop-shadow">
+                      {filteredItems[lightboxIndex].description}
+                    </p>
+                  </div>
+                  <button
+                    type="button"
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      setIsVideoMuted(!isVideoMuted);
+                    }}
+                    className="pointer-events-auto shrink-0 px-3.5 py-2 rounded-full bg-pink-primary/95 hover:bg-pink-dark text-white text-xs font-semibold flex items-center gap-1.5 shadow-lg hover:scale-105 transition-all cursor-pointer mr-10 sm:mr-12"
+                    title={isVideoMuted ? "Hidupkan Suara Video" : "Matikan Suara Video"}
+                  >
+                    {isVideoMuted ? (
+                      <>
+                        <VolumeX className="w-4 h-4" />
+                        <span>Hidupkan Suara</span>
+                      </>
+                    ) : (
+                      <>
+                        <Volume2 className="w-4 h-4 text-white animate-pulse" />
+                        <span>Suara Aktif</span>
+                      </>
+                    )}
+                  </button>
+                </div>
 
-            {/* Caption */}
-            <div className="absolute bottom-0 inset-x-0 bg-gradient-to-t from-black/70 to-transparent p-6 rounded-b-lg">
-              <h3 className="text-white font-semibold text-lg">
-                {filteredItems[lightboxIndex].title}
-              </h3>
-              <p className="text-white/80 text-sm mt-1">
-                {filteredItems[lightboxIndex].description}
-              </p>
-            </div>
+                <video
+                  key={filteredItems[lightboxIndex].src}
+                  src={filteredItems[lightboxIndex].src}
+                  className="w-full h-auto max-h-[80vh] object-contain rounded-xl mx-auto"
+                  controls
+                  autoPlay
+                  playsInline
+                  muted={isVideoMuted}
+                  onPlay={() => pauseBackgroundMusic()}
+                  onPause={() => resumeBackgroundMusic()}
+                  onEnded={() => resumeBackgroundMusic()}
+                />
+              </div>
+            ) : filteredItems[lightboxIndex].src ? (
+              <>
+                <Image
+                  src={filteredItems[lightboxIndex].src}
+                  alt={filteredItems[lightboxIndex].title}
+                  width={1200}
+                  height={800}
+                  className="w-full h-auto max-h-[85vh] object-contain rounded-lg"
+                />
+                {/* Caption untuk gambar */}
+                <div className="absolute bottom-0 inset-x-0 bg-gradient-to-t from-black/70 to-transparent p-6 rounded-b-lg">
+                  <h3 className="text-white font-semibold text-lg">
+                    {filteredItems[lightboxIndex].title}
+                  </h3>
+                  <p className="text-white/80 text-sm mt-1">
+                    {filteredItems[lightboxIndex].description}
+                  </p>
+                </div>
+              </>
+            ) : null}
           </div>
 
           {/* Thumbnail strip */}

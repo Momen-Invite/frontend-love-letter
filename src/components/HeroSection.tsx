@@ -1,10 +1,20 @@
 "use client";
 
+import { useState } from "react";
 import Image from "next/image";
 import { useConfetti } from "@/hooks/useConfetti";
 import { useScrollAnimation } from "@/hooks/useScrollAnimation";
 import { useAudio } from "@/hooks/useAudio";
 import { Heart, PartyPopper, Mail } from "lucide-react";
+
+interface FloatingHeartParticle {
+  id: number;
+  dx: number;
+  dy: number;
+  rot: number;
+  size: number;
+  color: string;
+}
 
 export interface HeroSectionProps {
   badge?: string;
@@ -28,6 +38,38 @@ export function HeroSection({
   const fireConfetti = useConfetti();
   const { play: playMusic } = useAudio(musicUrl);
   const [ref, isVisible] = useScrollAnimation<HTMLElement>(0.1);
+  const [hearts, setHearts] = useState<FloatingHeartParticle[]>([]);
+
+  const handleHeartClick = () => {
+    const colors = [
+      "#d4899a",
+      "#e11d48",
+      "#f43f5e",
+      "#fb7185",
+      "#ec4899",
+      "#f472b6",
+      "#c9a96e",
+    ];
+    const newHearts: FloatingHeartParticle[] = Array.from(
+      { length: 14 },
+      (_, i) => ({
+        id: Date.now() + i,
+        dx: (Math.random() - 0.5) * 160,
+        dy: -(110 + Math.random() * 130),
+        rot: (Math.random() - 0.5) * 60,
+        size: 18 + Math.floor(Math.random() * 16),
+        color: colors[Math.floor(Math.random() * colors.length)],
+      })
+    );
+
+    setHearts((prev) => [...prev, ...newHearts]);
+
+    setTimeout(() => {
+      setHearts((prev) =>
+        prev.filter((h) => !newHearts.some((nh) => nh.id === h.id))
+      );
+    }, 2200);
+  };
 
   const handleCelebrate = () => {
     fireConfetti();
@@ -148,9 +190,42 @@ export function HeroSection({
                   </div>
                 </div>
 
-                {/* Floating heart badge */}
-                <div className="absolute -top-2 right-4 md:right-0 w-12 h-12 md:w-14 md:h-14 bg-pink-primary rounded-full flex items-center justify-center shadow-lg animate-pulse-heart z-10">
-                  <Heart className="w-6 h-6 md:w-7 md:h-7 text-white fill-white" />
+                {/* Interactive heart badge with floating hearts burst */}
+                <div className="absolute -top-2 right-4 md:right-0 z-20">
+                  <button
+                    type="button"
+                    onClick={handleHeartClick}
+                    className="w-12 h-12 md:w-14 md:h-14 bg-gradient-to-tr from-pink-dark to-pink-primary rounded-full flex items-center justify-center shadow-xl hover:scale-115 active:scale-90 transition-all duration-300 cursor-pointer animate-pulse-heart group"
+                    title="Kirim Cinta! ❤️"
+                    aria-label="Kirim Cinta"
+                  >
+                    <Heart className="w-6 h-6 md:w-7 md:h-7 text-white fill-white group-hover:scale-110 transition-transform" />
+                  </button>
+
+                  {/* Floating heart particles */}
+                  {hearts.map((h) => (
+                    <div
+                      key={h.id}
+                      className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 pointer-events-none animate-float-love z-30"
+                      style={
+                        {
+                          "--dx": `${h.dx}px`,
+                          "--dy": `${h.dy}px`,
+                          "--rot": `${h.rot}deg`,
+                        } as React.CSSProperties
+                      }
+                    >
+                      <Heart
+                        style={{
+                          width: `${h.size}px`,
+                          height: `${h.size}px`,
+                          color: h.color,
+                          fill: h.color,
+                          filter: "drop-shadow(0 2px 6px rgba(0,0,0,0.2))",
+                        }}
+                      />
+                    </div>
+                  ))}
                 </div>
 
                 {/* Shadow/glow effect */}
