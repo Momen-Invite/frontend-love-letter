@@ -30,7 +30,7 @@ export async function generateMetadata({
   const pageUrl = `https://momeninvite.web.id/love-letter/${decodedSlug}`;
 
   return {
-    title: `Happy Birthday ${name} 🌸 | Love Letter - Momen Invite`,
+    title: `Happy Birthday ${name} 🌸 | Love Letter`,
     description,
     keywords: [
       "undangan ulang tahun online",
