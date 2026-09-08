@@ -50,14 +50,16 @@ function GalleryCard({
             </div>
           </div>
         ) : (
-          <div className="relative aspect-auto">
-            <Image
-              src={item.src}
-              alt={item.title}
-              width={400}
-              height={500}
-              className="w-full h-auto object-cover"
-            />
+          <div className="relative aspect-auto bg-slate-100 min-h-[160px]">
+            {item.src ? (
+              <Image
+                src={item.src}
+                alt={item.title}
+                width={400}
+                height={500}
+                className="w-full h-auto object-cover"
+              />
+            ) : null}
           </div>
         )}
 
@@ -230,7 +232,7 @@ export function GallerySection({ items = [] }: GallerySectionProps = {}) {
                 autoPlay
                 muted
               />
-            ) : (
+            ) : filteredItems[lightboxIndex].src ? (
               <Image
                 src={filteredItems[lightboxIndex].src}
                 alt={filteredItems[lightboxIndex].title}
@@ -238,7 +240,7 @@ export function GallerySection({ items = [] }: GallerySectionProps = {}) {
                 height={800}
                 className="w-full h-auto max-h-[85vh] object-contain rounded-lg"
               />
-            )}
+            ) : null}
 
             {/* Caption */}
             <div className="absolute bottom-0 inset-x-0 bg-gradient-to-t from-black/70 to-transparent p-6 rounded-b-lg">
@@ -270,7 +272,7 @@ export function GallerySection({ items = [] }: GallerySectionProps = {}) {
                   <div className="w-full h-full bg-charcoal/50 flex items-center justify-center">
                     <Play className="w-3 h-3 text-white" />
                   </div>
-                ) : (
+                ) : item.src ? (
                   <Image
                     src={item.src}
                     alt={item.title}
@@ -278,7 +280,7 @@ export function GallerySection({ items = [] }: GallerySectionProps = {}) {
                     height={48}
                     className="w-full h-full object-cover"
                   />
-                )}
+                ) : null}
               </button>
             ))}
           </div>

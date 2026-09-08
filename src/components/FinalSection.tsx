@@ -33,7 +33,11 @@ export function FinalSection({
   };
 
   return (
-    <section ref={ref} id="final" className="relative py-24 md:py-32">
+    <section
+      ref={ref}
+      id="final"
+      className="relative py-24 md:py-32 overflow-hidden bg-gradient-to-b from-[#25151e] via-[#170e13] to-[#0e070c]"
+    >
       {/* Background image with overlay */}
       <div className="absolute inset-0 z-0">
         {backgroundImage ? (
@@ -43,9 +47,10 @@ export function FinalSection({
             fill
             sizes="100vw"
             className="object-cover"
+            priority={false}
           />
         ) : null}
-        <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/40 to-black/60" />
+        <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/50 to-black/70" />
       </div>
 
       <div className="relative z-10 container mx-auto px-4 md:px-6 lg:px-8 max-w-3xl text-center">

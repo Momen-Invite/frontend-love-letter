@@ -132,35 +132,38 @@ export function TimelineSection({ items = [] }: TimelineSectionProps = {}) {
       {/* Lightbox Modal */}
       {lightboxIndex !== null && items[lightboxIndex] && (
         <div
-          className="fixed inset-0 z-50 bg-black/90 flex items-center justify-center p-4 animate-fade-in"
+          className="fixed inset-0 z-50 bg-black/85 backdrop-blur-sm flex items-center justify-center p-4 sm:p-6 animate-fade-in"
           onClick={() => setLightboxIndex(null)}
         >
           <button
-            className="absolute top-4 right-4 w-12 h-12 rounded-full bg-white/10 flex items-center justify-center text-white hover:bg-white/20 transition-colors z-10 cursor-pointer"
+            className="absolute top-4 right-4 w-11 h-11 rounded-full bg-white/15 flex items-center justify-center text-white hover:bg-white/25 transition-colors z-10 cursor-pointer"
             onClick={() => setLightboxIndex(null)}
+            aria-label="Tutup"
           >
-            <X className="w-6 h-6" />
+            <X className="w-5 h-5" />
           </button>
 
           <div
-            className="relative max-w-4xl max-h-[85vh] w-full animate-scale-in"
+            className="relative max-w-lg w-full max-h-[90vh] my-auto animate-scale-in"
             onClick={(e) => e.stopPropagation()}
           >
-            <div className="bg-white p-4 pb-16 shadow-2xl transform rotate-0">
-              <div className="relative aspect-[4/3] overflow-hidden">
-                <Image
-                  src={items[lightboxIndex].image}
-                  alt={items[lightboxIndex].title}
-                  fill
-                  sizes="(max-width: 768px) 100vw, 896px"
-                  className="object-cover"
-                />
+            <div className="bg-white p-3.5 pb-6 sm:pb-8 rounded-2xl shadow-2xl overflow-hidden">
+              <div className="relative aspect-[4/3] w-full rounded-xl overflow-hidden bg-slate-100">
+                {items[lightboxIndex].image ? (
+                  <Image
+                    src={items[lightboxIndex].image}
+                    alt={items[lightboxIndex].title}
+                    fill
+                    sizes="(max-width: 768px) 100vw, 512px"
+                    className="object-cover"
+                  />
+                ) : null}
               </div>
-              <div className="mt-6 text-center px-4">
-                <h3 className="font-serif italic text-2xl text-charcoal mb-2">
+              <div className="mt-4 text-center px-3">
+                <h3 className="font-serif italic text-xl sm:text-2xl text-charcoal mb-1.5">
                   {items[lightboxIndex].title}
                 </h3>
-                <p className="text-brown-light text-base leading-relaxed">
+                <p className="text-brown-light text-xs sm:text-sm leading-relaxed">
                   {items[lightboxIndex].description}
                 </p>
               </div>
