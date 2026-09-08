@@ -5,7 +5,32 @@ import Image from "next/image";
 import { useScrollAnimation } from "@/hooks/useScrollAnimation";
 import { Heart, Sparkles } from "lucide-react";
 
-export function LetterSection() {
+export interface LetterSectionProps {
+  polaroidImage?: string;
+  polaroidTitle?: string;
+  polaroidSubtitle?: string;
+  letterTitle?: string;
+  salutation?: string;
+  paragraphs?: string[];
+  senderName?: string;
+}
+
+const defaultParagraphs = [
+  "Selamat Happy Birthday my dear 🥳🎂,",
+  "Semoga dengan bertambahnya umur kamu yang sekarang sudah menginjak angka 20, aku harap kebahagiaan akan selalu menyertai kamu dan cita-cita yang kamu inginkan bisa cepat terwujud. ❤️",
+  "Apa pun yang diinginkan sekarang semoga bisa segera tercapai. Jadi orang yang lebih baik lagi ke depannya, sukses di masa depan, sukses di dunia maupun akhirat, serta selalu menjadi pribadi yang baik hati dan bijaksana. 🎇🎇",
+  "Aku selalu berdoa untuk kamu, apa pun itu. Aku akan selalu mendukung setiap keputusan dan keinginanmu. Selamat ya sayang, aku sayang kamu. Have fun untuk segalanya! 🎇🎉🎊🎂",
+];
+
+export function LetterSection({
+  polaroidImage,
+  polaroidTitle = "Ditulis Dengan Hati",
+  polaroidSubtitle = "Sebuah pesan rahasia untukmu",
+  letterTitle = "Sepucuk Surat Cinta",
+  salutation = "Teruntuk Sayang Tersayang",
+  paragraphs = defaultParagraphs,
+  senderName = "Aku",
+}: LetterSectionProps = {}) {
   const [isOpen, setIsOpen] = useState(false);
   const [ref, isVisible] = useScrollAnimation<HTMLElement>(0.1);
 
@@ -65,19 +90,22 @@ export function LetterSection() {
           >
             <div className="bg-white p-3 pb-12 shadow-lg rotate-[-2deg] hover:rotate-0 transition-transform duration-500 max-w-sm w-full">
               <div className="relative aspect-[4/3] overflow-hidden">
-                <Image
-                  src="/images/surat.jpeg"
-                  alt="Ditulis Dengan Hati"
-                  fill
-                  className="object-cover"
-                />
+                {polaroidImage ? (
+                  <Image
+                    src={polaroidImage}
+                    alt={polaroidTitle}
+                    fill
+                    sizes="(max-width: 768px) 100vw, 384px"
+                    className="object-cover"
+                  />
+                ) : null}
               </div>
               <div className="mt-4 text-center">
                 <p className="font-serif italic text-charcoal text-lg">
-                  Ditulis Dengan Hati
+                  {polaroidTitle}
                 </p>
                 <p className="text-brown-light text-xs mt-1">
-                  Sebuah pesan rahasia untukmu
+                  {polaroidSubtitle}
                 </p>
               </div>
             </div>
@@ -115,7 +143,7 @@ export function LetterSection() {
                   {/* Envelope body */}
                   <div className="px-6 py-8 text-center">
                     <p className="font-serif italic text-charcoal text-lg mb-1">
-                      ✦ Surat Cinta Tersegel ✦
+                      ✦ {letterTitle} ✦
                     </p>
                     <p className="text-brown-light text-xs mb-6">
                       Sebuah pesan yang ditulis dengan seluruh hati...
@@ -146,32 +174,13 @@ export function LetterSection() {
                   {/* Lined paper content */}
                   <div className="p-6 md:p-8 lined-paper">
                     <h3 className="font-serif italic text-xl text-charcoal mb-4 text-center">
-                      Teruntuk Sayang Tersayang
+                      {salutation}
                     </h3>
 
                     <div className="space-y-4 text-sm text-brown-light leading-relaxed">
-                      <p>
-                        Selamat Happy Birthday my dear 🥳🎂,
-                      </p>
-                      <p>
-                        Semoga dengan bertambahnya umur kamu yang sekarang sudah
-                        menginjak angka 20, aku harap kebahagiaan akan selalu
-                        menyertai kamu dan cita-cita yang kamu inginkan bisa cepat
-                        terwujud. ❤️
-                      </p>
-                      <p>
-                        Apa pun yang diinginkan sekarang semoga bisa segera
-                        tercapai. Jadi orang yang lebih baik lagi ke depannya,
-                        sukses di masa depan, sukses di dunia maupun akhirat,
-                        serta selalu menjadi pribadi yang baik hati dan bijaksana.
-                        🎇🎇
-                      </p>
-                      <p>
-                        Aku selalu berdoa untuk kamu, apa pun itu. Aku akan selalu
-                        mendukung setiap keputusan dan keinginanmu. Selamat ya
-                        sayang, aku sayang kamu. Have fun untuk segalanya!
-                        🎇🎉🎊🎂
-                      </p>
+                      {paragraphs.map((p, idx) => (
+                        <p key={idx}>{p}</p>
+                      ))}
                     </div>
 
                     <div className="mt-8 text-center">
@@ -179,7 +188,7 @@ export function LetterSection() {
                         Dengan Seluruh Cintaku,
                       </p>
                       <p className="font-serif italic text-2xl text-pink-primary">
-                        Aku
+                        {senderName}
                       </p>
                       <div className="flex justify-center gap-1 mt-2">
                         <Heart className="w-3 h-3 text-pink-primary fill-pink-primary animate-pulse-heart" />

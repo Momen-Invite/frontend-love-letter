@@ -6,9 +6,27 @@ import { useScrollAnimation } from "@/hooks/useScrollAnimation";
 import { useAudio } from "@/hooks/useAudio";
 import { Heart, PartyPopper, Mail } from "lucide-react";
 
-export function HeroSection() {
+export interface HeroSectionProps {
+  badge?: string;
+  heading1?: string;
+  heading2?: string;
+  celebrantName?: string;
+  description?: string;
+  heroImage?: string;
+  musicUrl?: string;
+}
+
+export function HeroSection({
+  badge = "Happy Birthday",
+  heading1 = "Selamat",
+  heading2 = "Ulang Tahun",
+  celebrantName = "Sayang",
+  description = "Di hari yang paling spesial ini, aku ingin kamu tahu betapa berarti dan berharganya kamu dalam hidupku. Kamu adalah hadiah terindahku.",
+  heroImage,
+  musicUrl,
+}: HeroSectionProps = {}) {
   const fireConfetti = useConfetti();
-  const { play: playMusic } = useAudio("/audios/monokrom.mp3");
+  const { play: playMusic } = useAudio(musicUrl);
   const [ref, isVisible] = useScrollAnimation<HTMLElement>(0.1);
 
   const handleCelebrate = () => {
@@ -66,25 +84,23 @@ export function HeroSection() {
             <div className="flex items-center gap-3 justify-center md:justify-start mb-6">
               <div className="h-px w-12 bg-gold" />
               <span className="text-xs font-semibold tracking-[0.2em] text-gold uppercase">
-                Happy Birthday
+                {badge}
               </span>
             </div>
 
             {/* Main heading */}
             <h1 className="font-serif text-5xl md:text-6xl lg:text-7xl font-bold leading-[1.1] mb-2">
-              <span className="italic text-charcoal">Selamat</span>
+              <span className="italic text-charcoal">{heading1}</span>
               <br />
-              <span className="italic text-charcoal">Ulang Tahun</span>
+              <span className="italic text-charcoal">{heading2}</span>
             </h1>
             <p className="font-serif text-3xl md:text-4xl lg:text-5xl italic font-bold bg-gradient-to-r from-pink-primary to-pink-dark bg-clip-text text-transparent mb-6">
-              Sayang
+              {celebrantName}
             </p>
 
             {/* Description */}
             <p className="text-brown-light text-base md:text-lg leading-relaxed mb-8 max-w-md mx-auto md:mx-0">
-              Di hari yang paling spesial ini, aku ingin kamu tahu betapa
-              berarti dan berharganya kamu dalam hidupku. Kamu adalah hadiah
-              terindahku.
+              {description}
             </p>
 
             {/* Buttons */}
@@ -118,14 +134,17 @@ export function HeroSection() {
               {/* Oval frame with pink border */}
               <div className="relative w-64 h-80 md:w-80 md:h-96 lg:w-96 lg:h-[28rem]">
                 <div className="absolute inset-0 rounded-[50%] bg-gradient-to-br from-pink-light/50 to-pink-primary/20 p-1">
-                  <div className="w-full h-full rounded-[50%] overflow-hidden border-4 border-white/60 shadow-2xl">
-                    <Image
-                      src="/images/head.jpeg"
-                      alt="Birthday Girl"
-                      fill
-                      className="object-cover"
-                      priority
-                    />
+                  <div className="relative w-full h-full rounded-[50%] overflow-hidden border-4 border-white/60 shadow-2xl">
+                    {heroImage ? (
+                      <Image
+                        src={heroImage}
+                        alt={celebrantName}
+                        fill
+                        sizes="(max-width: 768px) 256px, 384px"
+                        className="object-cover"
+                        priority
+                      />
+                    ) : null}
                   </div>
                 </div>
 

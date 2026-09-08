@@ -12,7 +12,11 @@ const navLinks = [
   { href: "#final", label: "Penutup" },
 ];
 
-export function Header() {
+export interface HeaderProps {
+  title?: string;
+}
+
+export function Header({ title = "Happy Birthday" }: HeaderProps = {}) {
   const [isScrolled, setIsScrolled] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
@@ -48,7 +52,7 @@ export function Header() {
           >
             <Heart className="w-5 h-5 text-pink-primary fill-pink-primary group-hover:scale-110 transition-transform" />
             <span className="font-serif italic text-lg text-charcoal">
-              Happy Birthday
+              {title}
             </span>
             <span className="text-sm">🌸</span>
           </button>

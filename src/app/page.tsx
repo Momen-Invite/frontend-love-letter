@@ -1,27 +1,16 @@
-import { Header } from "@/components/Header";
-import { HeroSection } from "@/components/HeroSection";
-import { LetterSection } from "@/components/LetterSection";
-import { TimelineSection } from "@/components/TimelineSection";
-import { WishesSection } from "@/components/WishesSection";
-import { GallerySection } from "@/components/GallerySection";
-import { QuotesSection } from "@/components/QuotesSection";
-import { FinalSection } from "@/components/FinalSection";
-import { ScrollToTopButton } from "@/components/ScrollToTopButton";
+import { fetchInvitationData } from "@/lib/api";
+import { InvitationView } from "@/components/InvitationView";
 
-export default function Home() {
-  return (
-    <>
-      <Header />
-      <main className="pt-16">
-        <HeroSection />
-        <LetterSection />
-        <TimelineSection />
-        <WishesSection />
-        <GallerySection />
-        <QuotesSection />
-        <FinalSection />
-      </main>
-      <ScrollToTopButton />
-    </>
-  );
+export default async function Home(props: {
+  searchParams?: Promise<{ slug?: string }>;
+}) {
+  const searchParams = props.searchParams ? await props.searchParams : {};
+  const slug =
+    searchParams?.slug ||
+    process.env.NEXT_PUBLIC_INVITATION_SLUG ||
+    "sayang";
+
+  const data = await fetchInvitationData(slug);
+
+  return <InvitationView data={data} />;
 }

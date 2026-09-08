@@ -2,10 +2,11 @@
 
 import { useCallback, useRef } from "react";
 
-export function useAudio(audioSrc: string) {
+export function useAudio(audioSrc?: string) {
   const audioRef = useRef<HTMLAudioElement | null>(null);
 
   const play = useCallback(() => {
+    if (!audioSrc) return;
     if (!audioRef.current) {
       audioRef.current = new Audio(audioSrc);
       audioRef.current.volume = 0.5;

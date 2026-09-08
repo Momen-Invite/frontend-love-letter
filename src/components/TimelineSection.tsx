@@ -4,14 +4,14 @@ import { useState } from "react";
 import Image from "next/image";
 import { useScrollAnimation } from "@/hooks/useScrollAnimation";
 import { Heart, Camera, X } from "lucide-react";
-import { timelineItems } from "@/lib/data";
+import type { TimelineItem } from "@/types";
 
 function TimelineCard({
   item,
   index,
   onImageClick,
 }: {
-  item: (typeof timelineItems)[0];
+  item: TimelineItem;
   index: number;
   onImageClick: () => void;
 }) {
@@ -41,12 +41,15 @@ function TimelineCard({
           onClick={onImageClick}
         >
           <div className="relative aspect-[4/3] overflow-hidden">
-            <Image
-              src={item.image}
-              alt={item.title}
-              fill
-              className="object-cover hover:scale-110 transition-transform duration-300"
-            />
+            {item.image ? (
+              <Image
+                src={item.image}
+                alt={item.title}
+                fill
+                sizes="(max-width: 768px) 100vw, 320px"
+                className="object-cover hover:scale-110 transition-transform duration-300"
+              />
+            ) : null}
           </div>
           <div className="mt-3 text-center px-2">
             <h3 className="font-serif italic text-base text-charcoal">
@@ -72,9 +75,15 @@ function TimelineCard({
   );
 }
 
-export function TimelineSection() {
+export interface TimelineSectionProps {
+  items?: TimelineItem[];
+}
+
+export function TimelineSection({ items = [] }: TimelineSectionProps = {}) {
   const [ref, isVisible] = useScrollAnimation<HTMLElement>(0.1);
   const [lightboxIndex, setLightboxIndex] = useState<number | null>(null);
+
+  if (items.length === 0) return null;
 
   return (
     <section ref={ref} id="timeline" className="py-16 md:py-24">
@@ -108,7 +117,7 @@ export function TimelineSection() {
           <div className="hidden md:block absolute left-1/2 top-0 bottom-0 w-px border-l-2 border-dashed border-pink-primary/30 -translate-x-px" />
 
           <div className="space-y-12 md:space-y-16">
-            {timelineItems.map((item, index) => (
+            {items.map((item, index) => (
               <TimelineCard
                 key={item.id}
                 item={item}
@@ -121,7 +130,7 @@ export function TimelineSection() {
       </div>
 
       {/* Lightbox Modal */}
-      {lightboxIndex !== null && (
+      {lightboxIndex !== null && items[lightboxIndex] && (
         <div
           className="fixed inset-0 z-50 bg-black/90 flex items-center justify-center p-4 animate-fade-in"
           onClick={() => setLightboxIndex(null)}
@@ -140,18 +149,19 @@ export function TimelineSection() {
             <div className="bg-white p-4 pb-16 shadow-2xl transform rotate-0">
               <div className="relative aspect-[4/3] overflow-hidden">
                 <Image
-                  src={timelineItems[lightboxIndex].image}
-                  alt={timelineItems[lightboxIndex].title}
+                  src={items[lightboxIndex].image}
+                  alt={items[lightboxIndex].title}
                   fill
+                  sizes="(max-width: 768px) 100vw, 896px"
                   className="object-cover"
                 />
               </div>
               <div className="mt-6 text-center px-4">
                 <h3 className="font-serif italic text-2xl text-charcoal mb-2">
-                  {timelineItems[lightboxIndex].title}
+                  {items[lightboxIndex].title}
                 </h3>
                 <p className="text-brown-light text-base leading-relaxed">
-                  {timelineItems[lightboxIndex].description}
+                  {items[lightboxIndex].description}
                 </p>
               </div>
             </div>

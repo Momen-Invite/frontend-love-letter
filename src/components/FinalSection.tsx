@@ -6,10 +6,26 @@ import { useConfetti } from "@/hooks/useConfetti";
 import { useAudio } from "@/hooks/useAudio";
 import { Heart, PartyPopper, Star, Gift, Sparkles, Cake } from "lucide-react";
 
-export function FinalSection() {
+export interface FinalSectionProps {
+  backgroundImage?: string;
+  heading?: string;
+  subtitle1?: string;
+  subtitle2?: string;
+  musicUrl?: string;
+  footerCredit?: string;
+}
+
+export function FinalSection({
+  backgroundImage,
+  heading = "Selamat Ulang Tahun, Sayang!",
+  subtitle1 = "Semoga hari ulang tahunmu ini menjadi awal dari bab paling bahagia dalam hidupmu.",
+  subtitle2 = "Aku mencintaimu kemarin, hari ini, dan selamanya.",
+  musicUrl,
+  footerCredit = "Dibuat dengan ❤️ oleh Aku",
+}: FinalSectionProps = {}) {
   const [ref, isVisible] = useScrollAnimation<HTMLElement>(0.3);
   const fireConfetti = useConfetti();
-  const { play: playMusic } = useAudio("/audios/monokrom.mp3");
+  const { play: playMusic } = useAudio(musicUrl);
 
   const handleCelebrate = () => {
     fireConfetti();
@@ -20,12 +36,15 @@ export function FinalSection() {
     <section ref={ref} id="final" className="relative py-24 md:py-32">
       {/* Background image with overlay */}
       <div className="absolute inset-0 z-0">
-        <Image
-          src="/images/footer.jpeg"
-          alt="Sunset background"
-          fill
-          className="object-cover"
-        />
+        {backgroundImage ? (
+          <Image
+            src={backgroundImage}
+            alt="Sunset background"
+            fill
+            sizes="100vw"
+            className="object-cover"
+          />
+        ) : null}
         <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/40 to-black/60" />
       </div>
 
@@ -44,16 +63,15 @@ export function FinalSection() {
 
           {/* Heading */}
           <h2 className="font-serif italic text-3xl md:text-4xl lg:text-5xl text-white mb-6 leading-tight">
-            Selamat Ulang Tahun, Sayang!
+            {heading}
           </h2>
 
           {/* Subtitle */}
           <p className="text-white/80 text-base md:text-lg leading-relaxed mb-3 max-w-lg mx-auto">
-            Semoga hari ulang tahunmu ini menjadi awal dari bab paling bahagia
-            dalam hidupmu.
+            {subtitle1}
           </p>
           <p className="text-white/70 text-base md:text-lg leading-relaxed mb-10 max-w-lg mx-auto">
-            Aku mencintaimu kemarin, hari ini, dan selamanya.
+            {subtitle2}
           </p>
 
           {/* CTA Button */}
@@ -91,9 +109,7 @@ export function FinalSection() {
 
           {/* Footer credit */}
           <p className="mt-16 text-white/50 text-sm">
-            Dibuat dengan{" "}
-            <Heart className="w-3.5 h-3.5 text-pink-primary fill-pink-primary inline-block mx-0.5" />{" "}
-            oleh Aku
+            {footerCredit}
           </p>
         </div>
       </div>

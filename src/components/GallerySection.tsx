@@ -4,13 +4,7 @@ import { useState, useCallback } from "react";
 import Image from "next/image";
 import { useScrollAnimation } from "@/hooks/useScrollAnimation";
 import { Camera, X, ChevronLeft, ChevronRight, Play } from "lucide-react";
-import galleryManifest from "@/lib/gallery-manifest.json";
-import type { GalleryManifest, GalleryItem } from "@/types/gallery";
-
-// Load manifest and prepare data
-const manifest = galleryManifest as GalleryManifest;
-const galleryCategories = ["Semua", ...manifest.categories.map((cat) => cat.label)];
-const galleryItems = manifest.items;
+import type { GalleryItem } from "@/types/gallery";
 
 function GalleryCard({
   item,
@@ -84,15 +78,25 @@ function GalleryCard({
   );
 }
 
-export function GallerySection() {
+export interface GallerySectionProps {
+  items?: GalleryItem[];
+}
+
+export function GallerySection({ items = [] }: GallerySectionProps = {}) {
   const [ref, isVisible] = useScrollAnimation<HTMLElement>(0.1);
   const [activeCategory, setActiveCategory] = useState<string>("Semua");
   const [lightboxIndex, setLightboxIndex] = useState<number | null>(null);
 
+  // Dapatkan daftar kategori dinamis dari item
+  const categories = ["Semua", ...Array.from(new Set(items.map((i) => i.category).filter(Boolean)))];
+
   const filteredItems =
     activeCategory === "Semua"
-      ? galleryItems
-      : galleryItems.filter((item) => item.category === activeCategory.toLowerCase());
+      ? items
+      : items.filter(
+          (item) =>
+            item.category.toLowerCase() === activeCategory.toLowerCase()
+        );
 
   const openLightbox = useCallback((index: number) => {
     setLightboxIndex(index);
@@ -115,6 +119,8 @@ export function GallerySection() {
         : null
     );
   }, [filteredItems.length]);
+
+  if (items.length === 0) return null;
 
   return (
     <section ref={ref} id="gallery" className="py-16 md:py-24">
@@ -151,7 +157,7 @@ export function GallerySection() {
               : "opacity-0 translate-y-8"
           }`}
         >
-          {galleryCategories.map((category) => (
+          {categories.map((category) => (
             <button
               key={category}
               onClick={() => setActiveCategory(category)}

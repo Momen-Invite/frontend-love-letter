@@ -10,7 +10,8 @@ import {
   Wind,
   Sparkles,
 } from "lucide-react";
-import { wishCards } from "@/lib/data";
+import { wishCards as defaultWishCards } from "@/lib/data";
+import type { WishCard as WishCardType } from "@/types";
 
 const iconMap: Record<string, React.ElementType> = {
   heart: Heart,
@@ -25,7 +26,7 @@ function WishCard({
   card,
   index,
 }: {
-  card: (typeof wishCards)[0];
+  card: WishCardType;
   index: number;
 }) {
   const [ref, isVisible] = useScrollAnimation<HTMLDivElement>(0.2);
@@ -59,7 +60,11 @@ function WishCard({
   );
 }
 
-export function WishesSection() {
+export interface WishesSectionProps {
+  cards?: WishCardType[];
+}
+
+export function WishesSection({ cards = defaultWishCards }: WishesSectionProps = {}) {
   const [ref, isVisible] = useScrollAnimation<HTMLElement>(0.1);
 
   return (
@@ -91,7 +96,7 @@ export function WishesSection() {
 
         {/* Cards grid */}
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
-          {wishCards.map((card, index) => (
+          {cards.map((card, index) => (
             <WishCard key={card.id} card={card} index={index} />
           ))}
         </div>

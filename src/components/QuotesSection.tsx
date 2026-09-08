@@ -2,10 +2,15 @@
 
 import { useState, useEffect, useCallback } from "react";
 import { useScrollAnimation } from "@/hooks/useScrollAnimation";
-import { Quote } from "lucide-react";
-import { quotes } from "@/lib/data";
+import { Quote as QuoteIcon } from "lucide-react";
+import { quotes as defaultQuotes } from "@/lib/data";
+import type { Quote } from "@/types";
 
-export function QuotesSection() {
+export interface QuotesSectionProps {
+  quotes?: Quote[];
+}
+
+export function QuotesSection({ quotes = defaultQuotes }: QuotesSectionProps = {}) {
   const [ref, isVisible] = useScrollAnimation<HTMLElement>(0.1);
   const [activeIndex, setActiveIndex] = useState(0);
 
@@ -19,7 +24,7 @@ export function QuotesSection() {
       setActiveIndex((prev) => (prev + 1) % quotes.length);
     }, 5000);
     return () => clearInterval(interval);
-  }, []);
+  }, [quotes.length]);
 
   return (
     <section
@@ -38,7 +43,7 @@ export function QuotesSection() {
           {/* Quote icon */}
           <div className="flex justify-center mb-8">
             <div className="w-14 h-14 rounded-full bg-gradient-to-br from-pink-primary/20 to-pink-dark/20 flex items-center justify-center">
-              <Quote className="w-6 h-6 text-pink-primary" />
+              <QuoteIcon className="w-6 h-6 text-pink-primary" />
             </div>
           </div>
 
