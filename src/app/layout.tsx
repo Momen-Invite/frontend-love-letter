@@ -18,8 +18,25 @@ const quicksand = Quicksand({
 });
 
 export const metadata: Metadata = {
-  title: "Happy Birthday Sayang 🌸",
-  description: "A beautiful birthday surprise made with love.",
+  metadataBase: new URL("https://momeninvite.web.id/love-letter"),
+  title: {
+    default: "Happy Birthday Sayang 🌸 | Love Letter - Momen Invite",
+    template: "%s | Momen Invite",
+  },
+  description:
+    "Undangan & kejutan ucapan ulang tahun online romantis penuh cinta dari Momen Invite.",
+  keywords: [
+    "undangan ulang tahun online",
+    "ucapan ulang tahun romantis",
+    "love letter birthday",
+    "momen invite",
+  ],
+  authors: [{ name: "Momen Invite", url: "https://momeninvite.web.id" }],
+  creator: "Momen Invite",
+  publisher: "Momen Invite",
+  icons: {
+    icon: "/love-letter/favicon.ico",
+  },
 };
 
 export default function RootLayout({
